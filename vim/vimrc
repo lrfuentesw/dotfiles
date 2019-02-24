@@ -1,0 +1,180 @@
+set nocompatible              " required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+
+" Add all your plugins here (note older versions of Vundle used Bundle
+" instead of Plugin)
+
+" SimpylFold
+Plugin 'tmhedberg/SimpylFold'
+" Indentación para python
+Plugin 'vim-scripts/indentpython.vim'
+"Autocompletado
+Bundle 'Valloric/YouCompleteMe'
+" Validación de sintaxis
+Plugin 'scrooloose/syntastic'
+" Validación PEP8
+Plugin 'nvie/vim-flake8'
+" Colores
+Plugin 'morhetz/gruvbox'
+" Cambiar background
+Plugin 'rakr/vim-togglebg'
+" Navegación de archivos
+Plugin 'scrooloose/nerdtree'
+" Super busqueda
+Plugin 'kien/ctrlp.vim'
+" Integración con git
+Plugin 'tpope/vim-fugitive'
+Plugin 'tommcdo/vim-fubitive'
+" Airline
+Bundle 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+"Color
+Plugin 'skielbasa/vim-material-monokai'
+"Color
+Plugin 'xero/sourcerer.vim'
+Plugin 'chriskempson/base16-vim'
+"MySQL plugins
+Plugin 'NLKNguyen/pipe.vim'
+Plugin 'NLKNguyen/pipe-mysql.vim'
+" Typescript
+Plugin 'leafgarland/typescript-vim'
+" Kotlin
+Plugin 'udalov/kotlin-vim'
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+set splitbelow
+set splitright
+
+" Navegación entre divisiones
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Habilitar plegado de código
+set foldmethod=indent
+set foldlevel=99
+
+" Plegado con la barra de espacio
+nnoremap <down> za
+
+" Ver docstrings para código plegado
+let g:SimpylFold_docstring_preview=1
+
+" PEP8
+au BufNewFile,BufRead *.py
+    \ set tabstop=4 |
+    \ set softtabstop=4 |
+    \ set shiftwidth=4 |
+    \ set textwidth=79 |
+    \ set expandtab |
+    \ set autoindent |
+    \ set fileformat=unix
+
+" Full stack development
+au BufNewFile,BufRead *.js set filetype=javascript
+au BufNewFile,BufRead *.html set filetype=html
+au BufNewFile,BufRead *.css set filetype=css
+au BufNewFile,BufRead *.js, *.html, *.css
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2
+
+au BufNewFile,BufRead *.ts
+    \ set tabstop=2 |
+    \ set softtabstop=2 |
+    \ set shiftwidth=2
+
+" MySQL Estandar Efisys
+au BufNewFile,BufRead *.sql set filetype=mysql
+au BufNewFile,BufRead *.sql
+    \ set tabstop=4 |
+    \ set shiftwidth=4
+
+" Señalar espacios innecesarios
+" Show trailing whitepace and spaces before a tab:
+:highlight ExtraWhitespace ctermbg=red guibg=red
+:match ExtraWhitespace /\s\+$\| \+\ze\t/
+:autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+
+" UTF-8
+set encoding=utf-8
+
+" Definir espacio como tecla leader
+let mapleader="-"
+" Ir a definición con  -g
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" Python con soporte para virtualenv
+py << EOF
+import os
+import sys
+if 'VIRTUAL_ENV' in os.environ:
+  project_base_dir = os.environ['VIRTUAL_ENV']
+  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
+  execfile(activate_this, dict(__file__=activate_this))
+EOF
+
+let python_highlight_all=1
+syntax on
+
+" Color
+if strftime("%H") < 12
+	set background=light
+else
+	set background=dark
+endif
+if filereadable(expand("~/.vimrc_background"))
+	let base16colorspace=256
+	source ~/.vimrc_background
+endif
+"colorscheme gruvbox
+"colorscheme sourcerer
+"colorscheme material-monokai
+
+" Cambiar fondo
+call togglebg#map("<F5>")
+
+" Airline
+set laststatus=2
+let g:airline_powerline_fonts = 0
+
+" Número de lineas
+set nu
+
+" Soporte para markdown
+autocmd BufNewFile,BufReadPost *.md set filetype=markdown
+
+let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+
+let g:markdown_syntax_conceal = 0
+
+let g:markdown_minlines = 100
+
+" Nerdtree
+map <C-n> :NERDTreeToggle<CR>
+
+" MySQL pipe
+let g:pipemysql_login_info = [
+                             \ {
+                             \    'description' : 'Local',
+                             \    'mysql_hostname' : 'localhost',
+                             \    'mysql_username' : 'root',
+                             \    'mysql_password' : 'safi2012',
+                             \ }
+                           \ ]
