@@ -43,9 +43,6 @@ Plugin 'skielbasa/vim-material-monokai'
 "Color
 Plugin 'xero/sourcerer.vim'
 Plugin 'chriskempson/base16-vim'
-"MySQL plugins
-Plugin 'NLKNguyen/pipe.vim'
-Plugin 'NLKNguyen/pipe-mysql.vim'
 " Typescript
 Plugin 'leafgarland/typescript-vim'
 " Kotlin
@@ -121,13 +118,13 @@ let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " Python con soporte para virtualenv
-py << EOF
+py3 << EOF
 import os
 import sys
 if 'VIRTUAL_ENV' in os.environ:
   project_base_dir = os.environ['VIRTUAL_ENV']
   activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  execfile(activate_this, dict(__file__=activate_this))
+  exec(open(activate_this).read(), dict(__file__=activate_this))
 EOF
 
 let python_highlight_all=1
@@ -143,7 +140,7 @@ if filereadable(expand("~/.vimrc_background"))
 	let base16colorspace=256
 	source ~/.vimrc_background
 endif
-"colorscheme gruvbox
+colorscheme gruvbox
 "colorscheme sourcerer
 "colorscheme material-monokai
 
@@ -169,12 +166,5 @@ let g:markdown_minlines = 100
 " Nerdtree
 map <C-n> :NERDTreeToggle<CR>
 
-" MySQL pipe
-let g:pipemysql_login_info = [
-                             \ {
-                             \    'description' : 'Local',
-                             \    'mysql_hostname' : 'localhost',
-                             \    'mysql_username' : 'root',
-                             \    'mysql_password' : 'safi2012',
-                             \ }
-                           \ ]
+" Sintaxis para diferentes versiones de python
+autocmd FileType python    let b:syntastic_python_python_exec = syntastic#util#parseShebang(bufnr(''))['exe']
