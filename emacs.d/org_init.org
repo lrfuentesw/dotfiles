@@ -1,0 +1,187 @@
+* Temas
+#+BEGIN_SRC emacs-lisp
+;; Sección de temas
+(use-package moe-theme
+  :ensure t)
+(use-package gruvbox-theme
+  :ensure t)
+(use-package nimbus-theme
+  :ensure t)
+(use-package spacemacs-theme
+  :defer t)
+(use-package cyberpunk-theme
+  :ensure t)
+;; :config
+(use-package doom-themes
+  :ensure t
+  :init
+  (setq doom-themes-enable-bold t
+      doom-themes-enable-italic t)
+  :config
+  (doom-themes-visual-bell-config)
+  (doom-themes-org-config)
+  (load-theme 'doom-one t))
+;; Termina sección de temas
+#+END_SRC
+
+* Try
+#+BEGIN_SRC emacs-lisp
+;; Para probar paquetes sin instalarlos permanentemente
+(use-package try
+  :ensure t)
+#+END_SRC
+
+* Which key
+#+BEGIN_SRC emacs-lisp
+;; Para ayuda con las combinaciones de teclas
+(use-package which-key
+  :ensure t
+  :config (which-key-mode))
+#+END_SRC
+
+* Org mode
+** Bullets
+#+BEGIN_SRC emacs-lisp
+;; Bullets para org mode
+(use-package org-bullets
+  :ensure t
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode t))))
+#+END_SRC
+
+* Ace windows
+#+BEGIN_SRC emacs-lisp
+;; Agrega ace-window para manejar ventanas
+(use-package ace-window
+  :ensure t
+  :init
+  (progn
+    (global-set-key [remap-other-window] 'ace-window)
+    (custom-set-faces
+     '(aw-leading-char-face
+       ((t (:inherit ace-jump-face-foreground :height 3.0)))))))
+#+END_SRC
+
+* Ivy, counsel y swiper
+#+BEGIN_SRC emacs-lisp
+;; Counsel
+(use-package counsel
+  :ensure t)
+
+;; Ivy
+(use-package ivy
+  :ensure t
+  :config
+  (ivy-mode 1)
+  (setq ivy-use-virtual-buffers t)
+  (setq ivy-display-style 'fancy))
+
+;; Swiper
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)
+	 ("C-r" . swiper)
+	 ("C-c C-r" . ivy-resume)
+	 ("M-x" . counsel-M-x)
+	 ("C-x C-f" . counsel-find-file))
+  :config
+  (progn
+    (ivy-mode 1)
+    (setq ivy-use-virtual-buffers t)
+    (setq ivy-display-style 'fancy)
+    (define-key read-expression-map (kbd "C-r") 'counsel-expression-history)))
+#+END_SRC
+
+* Magit
+#+BEGIN_SRC emacs-lisp
+;; Magit
+(use-package magit
+  :ensure t)
+#+END_SRC
+
+* Projectile
+#+BEGIN_SRC emacs-lisp
+;; Projectile
+(use-package projectile
+  :ensure t
+  :config
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (projectile-mode +1)
+  (setq projectile-completion-system 'ivy))
+#+END_SRC
+* Flycheck
+#+BEGIN_SRC emacs-lisp
+(use-package flycheck
+  :ensure t
+  :init
+  (global-flycheck-mode)
+#+END_SRC
+* Python
+** Elpy
+#+BEGIN_SRC emacs-lisp
+;; Elpy
+(use-package elpy
+  :ensure t
+  :init
+  (elpy-enable))
+  :config
+  (add-to-list 'elpy-project-ignored-directories "__pycache__")
+  (add-to-list 'elpy-project-ignored-directories ".cache"))
+#+END_SRC
+** Python checkers
+#+BEGIN_SRC emacs-lisp
+;; Use Flycheck elpy
+(when (require 'flycheck nil t)
+  (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
+  (add-hook 'elpy-mode-hook 'flycheck-mode))
+
+;; Flycheck-pycheckers
+(use-package flycheck-pycheckers
+  :ensure t)
+
+(with-eval-after-load 'flycheck
+  (add-hook 'flycheck-mode-hook #'flycheck-pycheckers-setup))
+(setq flycheck-pycheckers-venv-root "/mnt/data/virtualenvs/")
+(setq flycheck-pycheckers-checkers '(flake8 pylint mypy3))
+#+END_SRC
+** Pytest
+#+BEGIN_SRC emacs-lisp
+;; pytest
+(use-package python-pytest
+  :ensure t
+  :after python
+  :custom
+  (python-pytest-arguments
+   '("--color"
+     "--failed-first"
+     "--maxfail=5"
+     "-vv")))
+#+END_SRC
+** Pyvenv
+#+BEGIN_SRC emacs-lisp
+;; pyvenv
+(setenv "WORKON_HOME" "/mnt/data/virtualenvs")
+;;(setenv "VIRTUALENVWRAPPER_HOOK_DIR" "/mnt/data/virtualenvs/hooks")
+#+END_SRC
+
+* Yasnippet
+#+BEGIN_SRC emacs-lisp
+;; YASnippet
+(require 'yasnippet)
+(yas-global-mode 1)
+#+END_SRC
+
+* Adecuaciones generales
+** Hace ibuffer el defult
+#+BEGIN_SRC emacs-lisp
+(defalias 'list-buffers 'ibuffer)
+#+END_SRC
+** Lineas
+#+BEGIN_SRC emacs-lisp
+(setq truncate-lines t)
+(setq visual-line-mode t)
+#+END_SRC
+** Borrar espacios sobrantes
+#+BEGIN_SRC emacs-lisp
+(add-hook 'before-save-hook 'delete-trailing-whitespace)
+#+END_SRC
